@@ -24,7 +24,7 @@ DISABLE_LTO=0
 THIN_LTO=0
 
 # Files
-IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz
+IMAGE=$(pwd)/out/arch/arm64/boot/Image
 DTBO=$(pwd)/out/arch/arm64/boot/dtbo.img
 DTB=$(pwd)/out/arch/arm64/boot/dts/qcom
 
