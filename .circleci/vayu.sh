@@ -48,7 +48,7 @@ FINAL_ZIP_ALIAS=Karenulgarde-${TANGGAL}.zip
 ##----------------------------------------------------------##
 # Specify compiler.
 
-COMPILER=clang17-7
+COMPILER=linaro
 
 ##----------------------------------------------------------##
 # Specify Linker
@@ -245,6 +245,21 @@ function cloneTC() {
     export KERNEL_CCOMPILE32_PATH="${KERNEL_DIR}/gcc32"
     export KERNEL_CCOMPILE32="arm-linux-gnueabihf-"
     export PATH="$KERNEL_CCOMPILE32_PATH/bin:$PATH"
+
+    elif [ $COMPILER = "linaro" ];
+	then    
+    wget https://releases.linaro.org/components/toolchain/binaries/7.5-2019.12/aarch64-linux-gnu/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz && tar -xf gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+    mv gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu gcc64
+    export KERNEL_CCOMPILE64_PATH="${KERNEL_DIR}/gcc64"
+    export KERNEL_CCOMPILE64="aarch64-linux-gnu-"
+    export PATH="$KERNEL_CCOMPILE64_PATH/bin:$PATH"
+    GCC_VERSION=$(aarch64-linux-gnu-gcc --version | grep "(GCC)" | sed 's|.*) ||')
+   
+    wget https://releases.linaro.org/components/toolchain/binaries/7.5-2019.12/arm-linux-gnueabi/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.tar.xz && tar -xf gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.tar.xz
+    mv gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi gcc32
+    export KERNEL_CCOMPILE32_PATH="${KERNEL_DIR}/gcc32"
+    export KERNEL_CCOMPILE32="arm-linux-gnueabi-"
+    export PATH="$KERNEL_CCOMPILE32_PATH/bin:$PATH" 
    
 	elif [ $COMPILER = "eva" ];
 	then
@@ -304,7 +319,7 @@ function exports() {
         export SUBARCH=arm64
         
         # Export Local Version
-        #export LOCALVERSION="-${VERSION}"
+        # export LOCALVERSION="-${VERSION}"
         
         # KBUILD HOST and USER
         export KBUILD_BUILD_HOST=Pancali
@@ -314,8 +329,8 @@ function exports() {
 	    export DISTRO=$(source /etc/os-release && echo "${NAME}")
 	    
 	    # Server caching for speed up compile
-	    #export LC_ALL=C && export USE_CCACHE=1
-	    #ccache -M 100G
+	    # export LC_ALL=C && export USE_CCACHE=1
+	    # ccache -M 100G
 	
 	}
         
@@ -393,15 +408,8 @@ START=$(date +"%s")
 	   then
 	       make -kj$(nproc --all) O=out \
 	       ARCH=arm64 \
-	       CROSS_COMPILE_ARM32=arm-eabi- \
-	       CROSS_COMPILE=aarch64-elf- \
-	       LD=aarch64-elf-${LINKER} \
-	       AR=llvm-ar \
-	       NM=llvm-nm \
-	       OBJCOPY=llvm-objcopy \
-	       OBJDUMP=llvm-objdump \
-	       STRIP=llvm-strip \
-	       OBJSIZE=llvm-size \
+	       CROSS_COMPILE=$KERNEL_CCOMPILE64 \
+           CROSS_COMPILE_ARM32=$KERNEL_CCOMPILE32 \
 	       V=$VERBOSE 2>&1 | tee error.log
 	       
     elif [ -d ${KERNEL_DIR}/aosp-clang ];
@@ -438,8 +446,8 @@ function zipping() {
         zip -r9 ${ZIPNAME} *
         MD5CHECK=$(md5sum "$ZIPNAME" | cut -d' ' -f1)
         echo "Zip: $ZIPNAME"
-        #curl -T $ZIPNAME temp.sh; echo
-        #curl -T $ZIPNAME https://oshi.at; echo
+        # curl -T $ZIPNAME temp.sh; echo
+        # curl -T $ZIPNAME https://oshi.at; echo
         curl --upload-file $ZIPNAME https://free.keep.sh
     cd ..
 }
