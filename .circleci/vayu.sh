@@ -410,6 +410,7 @@ START=$(date +"%s")
 	       ARCH=arm64 \
 	       CROSS_COMPILE=$KERNEL_CCOMPILE64 \
            CROSS_COMPILE_ARM32=$KERNEL_CCOMPILE32 \
+           CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- \
 	       V=$VERBOSE 2>&1 | tee error.log
 	       
     elif [ -d ${KERNEL_DIR}/aosp-clang ];
