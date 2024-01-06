@@ -48,7 +48,7 @@ FINAL_ZIP_ALIAS=Karenulgarde-${TANGGAL}.zip
 ##----------------------------------------------------------##
 # Specify compiler.
 
-COMPILER=linaro
+COMPILER=clang17-7
 
 ##----------------------------------------------------------##
 # Specify Linker
@@ -280,7 +280,7 @@ function cloneTC() {
 	fi
 	
     # Clone AnyKernel
-    #git clone --depth=1 https://github.com/missgoin/AnyKernel3.git
+    # git clone --depth=1 https://github.com/missgoin/AnyKernel3.git
 
 	}
 
@@ -357,6 +357,7 @@ START=$(date +"%s")
 	       CC=$KERNEL_CLANG \
            CROSS_COMPILE=$KERNEL_CCOMPILE64 \
            CROSS_COMPILE_ARM32=$KERNEL_CCOMPILE32 \
+           CLANG_TRIPLE=aarch64-linux-gnu- \
            LD=${LINKER} \
            LLVM=1 \
            LLVM_IAS=1 \
