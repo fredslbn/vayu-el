@@ -96,12 +96,12 @@ static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, s
 {
     struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
 
-#if USE_FENTRY_OFFSET
-    regs->ip = (unsigned long) hook->function;
-#else
+//#if USE_FENTRY_OFFSET
+//    regs->ip = (unsigned long) hook->function;
+//#else
     if(!within_module(parent_ip, THIS_MODULE))
-        regs = (unsigned long) hook->function;
-#endif
+        regs->ip = (unsigned long) hook->function;
+//#endif
 }
 
 /* Assuming we've already set hook->name, hook->function and hook->original, we 
