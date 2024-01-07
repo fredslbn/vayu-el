@@ -38,10 +38,10 @@ int wled_flash_led_prepare(struct led_trigger *trig, int options,
 					int *max_current);
 #else
 static inline int wled_flash_led_prepare(struct led_trigger *trig, int options,
-					int *max_current)
-{
-	return -EINVAL;
-}
+					int *max_current);
+//{
+//	return -EINVAL;
+//}
 #endif
 
 #endif
