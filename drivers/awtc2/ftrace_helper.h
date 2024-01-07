@@ -27,6 +27,19 @@ static struct kprobe kp = {
 };
 #endif
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,11,0)
+#define FTRACE_OPS_FL_RECURSION FTRACE_OPS_FL_RECURSION_SAFE
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,11,0)
+#define ftrace_regs pt_regs
+
+static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+{
+	return fregs;
+}
+#endif
+
 #define HOOK(_name, _hook, _orig)   \
 {                   \
     .name = (_name),        \
@@ -44,9 +57,6 @@ static struct kprobe kp = {
  * protection and implement our own).
  * */
 #define USE_FENTRY_OFFSET 0
-#if !USE_FENTRY_OFFSET
-#pragma GCC optimize("-fno-optimize-sibling-calls")
-#endif
 
 /* We pack all the information we need (name, hooking function, original function)
  * into this struct. This makes is easier for setting up the hook and just passing
@@ -92,16 +102,18 @@ static int fh_resolve_hook_address(struct ftrace_hook *hook)
 }
 
 /* See comment below within fh_install_hook() */
-static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct pt_regs *regs)
+static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip,
+		struct ftrace_ops *ops, struct ftrace_regs *fregs)
 {
-    struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
+	struct pt_regs *regs = ftrace_get_regs(fregs);
+	struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
 
-//#if USE_FENTRY_OFFSET
-//    regs->ip = (unsigned long) hook->function;
-//#else
-    if(!within_module(parent_ip, THIS_MODULE))
-        regs->ip = (unsigned long) hook->function;
-//#endif
+#if USE_FENTRY_OFFSET
+	regs->ip = (unsigned long)hook->function;
+#else
+	if (!within_module(parent_ip, THIS_MODULE))
+		regs->ip = (unsigned long)hook->function;
+#endif
 }
 
 /* Assuming we've already set hook->name, hook->function and hook->original, we 
