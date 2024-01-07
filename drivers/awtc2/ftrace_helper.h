@@ -100,7 +100,7 @@ static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip, s
     regs->ip = (unsigned long) hook->function;
 #else
     if(!within_module(parent_ip, THIS_MODULE))
-        regs->ip = (unsigned long) hook->function;
+        regs = (unsigned long) hook->function;
 #endif
 }
 
