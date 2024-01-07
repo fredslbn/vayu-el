@@ -48,7 +48,7 @@ FINAL_ZIP_ALIAS=Karenulgarde-${TANGGAL}.zip
 ##----------------------------------------------------------##
 # Specify compiler.
 
-COMPILER=clang17-7
+COMPILER=clang15-7
 
 ##----------------------------------------------------------##
 # Specify Linker
@@ -174,10 +174,10 @@ function cloneTC() {
     
     elif [ $COMPILER = "clang15-7" ];
 	then
-	#git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/ -b android10-gsi --depth 1 --no-tags --single-branch clang_all
+	# git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/ -b android10-gsi --depth 1 --no-tags --single-branch clang_all
     wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/914f9e5ae603f1a290c92160e3958c251184d3f0/clang-r458507.tar.gz && mkdir clang && tar -xzvf clang-r458507.tar.gz -C clang/
-    #mv clang_all/clang-r353983c clang
-    #rm -rf clang_all
+    # mv clang_all/clang-r353983c clang
+    # rm -rf clang_all
     export KERNEL_CLANG_PATH="${KERNEL_DIR}/clang"
     export KERNEL_CLANG="clang"
     export PATH="$KERNEL_CLANG_PATH/bin:$PATH"
