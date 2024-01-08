@@ -1,6 +1,0 @@
-config AWTC2_MOD
-	tristate "Hooking Process"
-	default m
-	depends on MODULES
-	help
-	  for hiding process in userspace

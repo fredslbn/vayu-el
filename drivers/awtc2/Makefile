@@ -1,1 +1,0 @@
-obj-m += rootkit.o
