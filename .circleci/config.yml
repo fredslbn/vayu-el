@@ -12,7 +12,7 @@ jobs:
             git clone --depth=1 https://github.com/fredslbn/vayu-el.git -b main builder_kernel
             cd builder_kernel
             git submodule update --init --recursive
-            bash .circleci/vayu.sh
+            
 workflows:
   version: 2.1
   cooking:
