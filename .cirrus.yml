@@ -5,4 +5,6 @@ task:
       image: nexgang/ubuntu:latest
       cpu: 8
       memory: 32G
-  script: clanglinaro.sh
+      
+  Build_script:
+      - bash clanglinaro.sh
