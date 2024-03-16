@@ -2,10 +2,9 @@
 
 #
 # Script For Building Android Kernel
-
 ##----------------------------------------------------------##
 # Specify Kernel Directory
-export KERNEL_DIR="$(pwd)"
+KERNEL_DIR="$(pwd)"
 
 git submodule update --init --recursive --remote
 
@@ -15,22 +14,22 @@ MODEL=Xiaomi
 DEVICE=vayu
 
 # Kernel Version Code
-#VERSION=
+# VERSION=
 
 # Kernel Defconfig
-export DEFCONFIG=vayu_defconfig
+DEFCONFIG=vayu_defconfig
 
 # Select LTO variant ( Full LTO by default )
 # DISABLE_LTO=0
 # THIN_LTO=0
 
 # Files
-export IMAGE=$(pwd)/out/arch/arm64/boot/Image
-export DTBO=$(pwd)/out/arch/arm64/boot/dtbo.img
-export DTB=$(pwd)/out/arch/arm64/boot/dts/qcom
+IMAGE=$(pwd)/out/arch/arm64/boot/Image
+DTBO=$(pwd)/out/arch/arm64/boot/dtbo.img
+DTB=$(pwd)/out/arch/arm64/boot/dts/qcom
 
 # Verbose Build
-export VERBOSE=0
+VERBOSE=0
 
 # Kernel Version
 # KERVER=$(make kernelversion)
@@ -38,11 +37,11 @@ export VERBOSE=0
 # COMMIT_HEAD=$(git log --oneline -1)
 
 # Date and Time
-export DATE=$(TZ=Asia/Jakarta date +"%Y%m%d-%T")
-export TANGGAL=$(date +"%F%S")
+DATE=$(TZ=Asia/Jakarta date +"%Y%m%d-%T")
+TANGGAL=$(date +"%F%S")
 
 # Specify Final Zip Name
-export ZIPNAME="SUPER.KERNEL-VAYU-CLO-$(TZ=Asia/Jakarta date +"%Y%m%d-%H%M").zip"
+ZIPNAME="SUPER.KERNEL-VAYU-CLO-$(TZ=Asia/Jakarta date +"%Y%m%d-%H%M").zip"
 FINAL_ZIP=${ZIPNAME}-${DEVICE}-${TANGGAL}.zip
 FINAL_ZIP_ALIAS=Karenulgarde-${TANGGAL}.zip
 
