@@ -1,0 +1,8 @@
+task:
+  name: "Vayu El"
+  timeout_in: 1h
+  container:
+      image: nexgang/ubuntu:latest
+      cpu: 8
+      memory: 32G
+  script: clanglinaro.sh
