@@ -8,8 +8,9 @@ task:
       memory: 32G
       
   setup_script:
+    - ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && date
     - apt update && apt upgrade -y
-    - cd KernelSU
+    - cd ksunongki
     - git submodule update --init --recursive --remote
     - git rev-list --count HEAD
     - cd ..
