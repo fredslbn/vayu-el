@@ -93,6 +93,7 @@ retry:
 			goto retry;
 		}
 	}
+	
 #ifdef CONFIG_KSU_SUSFS_SUS_OVERLAYFS
 	/* - When mounting overlay, the f_flags are set with 'ro' and 'relatime',
 	 *   but this is an abnormal status, as when we inspect the output from mountinfo,
@@ -109,6 +110,7 @@ retry:
 		st->f_flags |= ST_NOATIME;
 	}
 #endif
+
 	return error;
 }
 
@@ -120,12 +122,14 @@ int fd_statfs(int fd, struct kstatfs *st)
 		error = vfs_statfs(&f.file->f_path, st);
 		fdput(f);
 	}
+
 #ifdef CONFIG_KSU_SUSFS_SUS_OVERLAYFS
 	if (unlikely((st->f_flags & ST_RDONLY) && (st->f_flags & ST_RELATIME))) {
 		st->f_flags &= ~ST_RELATIME;
 		st->f_flags |= ST_NOATIME;
 	}
 #endif
+
 	return error;
 }
 
